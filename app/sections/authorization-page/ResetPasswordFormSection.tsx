@@ -37,7 +37,7 @@ const ResetPasswordFormSection = ({
     },
 
     validate: {
-      password: (value) => {
+      password: (value: string) => {
         if (/\s/.test(value)) return "Пароль не може містити пробілів";
         if (/[\u0400-\u04FF]/.test(value))
           return "Не дозволяються кириличні символи";
@@ -49,8 +49,11 @@ const ResetPasswordFormSection = ({
         if (!/[0-9]/.test(value)) return "Пароль повинен містити цифру";
         return null;
       },
-      confirmPassword: (value, values) =>
-        value !== values.password ? "Паролі повинні співпадати" : null,
+
+      confirmPassword: (
+        value: string,
+        values: { password: string; confirmPassword: string },
+      ) => (value !== values.password ? "Паролі повинні співпадати" : null),
     },
   });
 
@@ -84,7 +87,7 @@ const ResetPasswordFormSection = ({
       const response = await resetForgetPassword(
         resetPasswordToken,
         password,
-        setInfoMessage
+        setInfoMessage,
       );
       setIsLoading(false);
       if (response === 200) {

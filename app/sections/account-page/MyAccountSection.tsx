@@ -38,7 +38,7 @@ const MyAccountSection = () => {
   ];
 
   const getDaysInMonth = (
-    month: string
+    month: string,
   ): { value: string; label: string }[] => {
     const daysInMonthMap: { [key: string]: number } = {
       january: 31,
@@ -120,15 +120,15 @@ const MyAccountSection = () => {
       subscribe: false,
     },
     validate: {
-      name: (value) =>
+      name: (value: string) =>
         value.length < 3 ? "Ім'я повинно містити не менше 3 символів" : null,
-      fullname: (value) =>
+      fullname: (value: string) =>
         value.length < 3
           ? "Повне ім'я повинно містити не менше 3 символів"
           : null,
-      email: (value) =>
+      email: (value: string) =>
         /^\S+@\S+$/.test(value) ? null : "Невірна електронна адреса",
-      phone: (value) => {
+      phone: (value: string) => {
         if (value) {
           const operatorCode = form.values.phone.slice(3, 6);
           if (
@@ -140,19 +140,18 @@ const MyAccountSection = () => {
           return null;
         }
       },
-      date: (value, values) => {
+      date: (value: string, values: { month: string }) => {
         if (value) {
-          const month = values.month;
-          const maxDays = getDaysInMonth(month).length;
-          const dayNumber = Number(value);
+          const maxDays = getDaysInMonth(values.month).length;
+          const day = Number(value);
 
-          if (isNaN(dayNumber) || dayNumber < 1 || dayNumber > maxDays) {
+          if (day < 1 || day > maxDays) {
             return "Оберіть коректну дату";
           }
-          return null;
         }
+        return null;
       },
-      address1: (value) => {
+      address1: (value:string) => {
         if (!value.trim()) {
           return "Оберіть місто зі списку";
         }
@@ -162,7 +161,7 @@ const MyAccountSection = () => {
         }
         return null;
       },
-      month: (value) => {
+      month: (value: string) => {
         const monthValues = months.map((month) => month.value);
         if (!monthValues.includes(value)) {
           return "Оберіть місяць зі списку";
@@ -179,7 +178,7 @@ const MyAccountSection = () => {
       remember: false,
     },
     validate: {
-      password: (value) => {
+      password: (value: string) => {
         if (/\s/.test(value)) return "Пароль не може містити пробілів";
         if (/[\u0400-\u04FF]/.test(value))
           return "Не дозволяються кириличні символи";
@@ -196,7 +195,7 @@ const MyAccountSection = () => {
         }
         return null;
       },
-      verify: (value, values) =>
+      verify: (value: string, values: { password: string; verify: string; remember: boolean })=>
         value !== values.password ? "Паролі не співпадають" : null,
     },
   });
@@ -344,7 +343,7 @@ const MyAccountSection = () => {
             response1 = await addNewReceiver(
               values.name,
               values.email,
-              setInfoMessage
+              setInfoMessage,
             );
             if (response1 === 201) {
               setSubscribe(true);
@@ -557,7 +556,6 @@ const MyAccountSection = () => {
                   type="text"
                   bordered
                   fullWidth
-                  
                   {...form.getInputProps("address2")}
                 />
               </div>

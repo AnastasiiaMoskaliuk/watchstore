@@ -64,8 +64,9 @@ const BasicInfoSection: FC<{
       email: isEmail("Некоректний емейл"),
       firstName: hasLength({ min: 2 }, "Некоректне ім'я"),
       lastName: hasLength({ min: 2 }, "Некоректне прізвище"),
-      phone: (value) => {
-        const operatorCode = form.values.phone.slice(3, 6);
+
+      phone: (value: string) => {
+        const operatorCode = value.slice(3, 6);
         if (
           !/^\+38\d{10}$/.test(value) ||
           !validOperators.includes(operatorCode)
@@ -74,7 +75,8 @@ const BasicInfoSection: FC<{
         }
         return null;
       },
-      city: (value) => (value.trim() ? null : "Оберіть місто"),
+
+      city: (value: string) => (value.trim() ? null : "Оберіть місто"),
     },
   });
 

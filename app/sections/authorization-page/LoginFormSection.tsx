@@ -27,7 +27,7 @@ const LoginFormSection = () => {
     },
     validate: {
       email: isEmail("Неправильна електронна пошта"),
-      password: (value) => {
+      password: (value: string) => {
         if (/\s/.test(value)) return "Пароль не повинен містити пробілів";
         if (value.length < 6) return "Пароль повинен мати не меньше 6 символів";
         if (value.length > 20)
