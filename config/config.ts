@@ -2,7 +2,7 @@ import axios from "axios";
 import { updateRefreshToken } from "@/services/AuthService";
 import { InfoMessage } from "@/config/types";
 
-export const BASE_URL = "http://localhost:4001";
+export const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:4001";
 export const CLIENT_URL = "https://localhost:3000";
 // export const BASE_URL = "https://admin.montre-d-art.store";
 // export const CLIENT_URL = "https://montre-d-art.store";
