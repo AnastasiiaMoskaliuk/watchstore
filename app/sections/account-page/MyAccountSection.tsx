@@ -120,9 +120,9 @@ const MyAccountSection = () => {
       subscribe: false,
     },
     validate: {
-      name: (value) =>
+      name: (value: string) =>
         value.length < 3 ? "Ім'я повинно містити не менше 3 символів" : null,
-      fullname: (value) =>
+      fullname: (value: string) =>
         value.length < 3
           ? "Повне ім'я повинно містити не менше 3 символів"
           : null,
