@@ -126,9 +126,9 @@ const MyAccountSection = () => {
         value.length < 3
           ? "Повне ім'я повинно містити не менше 3 символів"
           : null,
-      email: (value) =>
+      email: (value: string) =>
         /^\S+@\S+$/.test(value) ? null : "Невірна електронна адреса",
-      phone: (value) => {
+      phone: (value: string) => {
         if (value) {
           const operatorCode = form.values.phone.slice(3, 6);
           if (
