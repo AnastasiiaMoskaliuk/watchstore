@@ -11,6 +11,6 @@ allow: /catalog/*,
 allow: /contact-us,
 allow: /legal
 
-sitemap: https://montre-d-art.store/sitemap.xml
+sitemap: https://https://watchstore.pp.ua/sitemap.xml
 
 crawl-delay: 10

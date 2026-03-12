@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Montre d`Art - онлайн-магазин годинників",
     description: "Найкращі годинники за доступною ціною",
-    url: "https://montre-d-art.store",
+    url: "https://https://watchstore.pp.ua",
     siteName: "Montre d`Art",
     images: [
       {

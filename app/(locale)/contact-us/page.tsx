@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Montre d`Art - зворотній зв'язок",
     description: "Зв'яжіться з нами, щоб дізнатися більше про годинники",
-    url: "https://montre-d-art.store/contact-us",
+    url: "https://https://watchstore.pp.ua/contact-us",
     images: [
       {
         url: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.uhdpaper.com%2F&psig=AOvVaw3uIc62Gm4xGzV2NFGYLUWR&ust=1733325924157000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCLC687H0i4oDFQAAAAAdAAAAABAE",
