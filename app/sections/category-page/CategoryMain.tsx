@@ -27,14 +27,17 @@ const CategoryMain = () => {
   const { setInfoMessage } = useAlert();
 
   useEffect(() => {
-    const fetchFilters = async () => {
-      const data = await getFilters(setInfoMessage);
-      if (data.priceRange.values[0].value[1] != 10) {
-        setFilters(data);
-        setIsFilter(true);
-      }
-    };
+const fetchFilters = async () => {
+  const data = await getFilters(setInfoMessage);
 
+  console.log("filters response:", data);
+  const maxPrice = data?.priceRange?.values?.[0]?.value?.[1];
+
+  if (maxPrice !== undefined && maxPrice !== 10) {
+    setFilters(data);
+    setIsFilter(true);
+  }
+};
     fetchFilters();
   }, []);
 
