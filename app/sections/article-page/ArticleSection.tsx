@@ -47,7 +47,7 @@ const ArticleSection = ({ blogName }: { blogName: string }) => {
     articleSection: articleData?.categories,
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `https://montre-d-art.store/blog/${articleData?.handle}`,
+      "@id": `https://https://watchstore.pp.ua/blog/${articleData?.handle}`,
     },
   };
 

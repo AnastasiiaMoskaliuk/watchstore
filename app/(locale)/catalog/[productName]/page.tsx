@@ -1,32 +1,32 @@
 import type { Metadata } from "next";
-
+import { Loader } from "@mantine/core";
 import ProductSection from "@/app/sections/product-page/ProductSection";
 
+// Обов'язково типізуємо params як Promise
+interface PageProps {
+  params: Promise<{ productName: string }>;
+}
+
 export const metadata: Metadata = {
-  title: "Montre d`Art — Годинник, що створює стиль",
-  description: "Годинники, які підкреслюють вашу індивідуальність. Знайдіть свій ідеальний аксесуар у Montre d`Art.",
-  keywords: [
-    "Елегантні годинники",
-    "Чернівці",
-    "онлайн-магазин годинників",
-    "унікальні дизайни",
-    "купити годинник",
-    "стильний аксесуар",
-    "подарунок",
-  ],
+  title: "Montre d`Art — Годинник",
+  description: "Опис товару",
 };
 
-export const generateViewport = () => ({
-	initialScale: 1.0,
-	width: "device-width",
- });
+const Page = async ({ params }: PageProps) => {
+  const resolvedParams = await params;
+  const nameFromUrl = resolvedParams.productName;
 
-const Page = ({ params }: { params: any }) => {
-  const productName = params.productName;
+  if (!nameFromUrl) {
+    return (
+      <div className="flex justify-center items-center min-h-[80vh] w-full ">
+        <Loader className="animate-spin rounded-full border-4 border-darkBlack border-b-transparent w-10 h-10" />
+      </div>
+    );
+  }
 
   return (
     <>
-      <ProductSection productName={productName} />
+      <ProductSection productName={nameFromUrl} />
     </>
   );
 };

@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     title: "Montre d`Art - Блоги про годинники",
     description:
       "Відкрийте для себе цікаві факти, рекомендації та натхнення у світі годинникового мистецтва. Читайте наші блоги!",
-    url: "https://montre-d-art.store/blog",
+    url: "https://https://watchstore.pp.ua/blog",
     images: [
       {
         url: "",

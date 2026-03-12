@@ -1,4 +1,4 @@
 module.exports = {
-  siteUrl: "https://montre-d-art.store",
+  siteUrl: "https://https://watchstore.pp.ua",
   generateRobotsTxt: true,
 };

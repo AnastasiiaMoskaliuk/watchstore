@@ -90,7 +90,7 @@ const ProductSection: FC<productProps> = ({ productName }) => {
         console.error("Failed to fetch product data:", error);
       }
     };
-
+console.log("ПЕРЕВІРКА ПРОПСІВ:", productName)
     fetchProduct();
   }, [productName]);
 
@@ -153,7 +153,7 @@ const ProductSection: FC<productProps> = ({ productName }) => {
       priceCurrency: "UAH",
       price: product?.price,
       availability: product?.quantity,
-      url: `https://montre-d-art.store/product/${product?.handle}`,
+      url: `https://https://watchstore.pp.ua/product/${product?.handle}`,
     },
   };
 
