@@ -3,9 +3,9 @@ import { updateRefreshToken } from "@/services/AuthService";
 import { InfoMessage } from "@/config/types";
 
 export const BASE_URL = "https://watchstore-bk-production.up.railway.app";
-export const CLIENT_URL = "https://watchstore-production.up.railway.app";
+// export const CLIENT_URL = "https://watchstore-production.up.railway.app";
 // export const BASE_URL = "https://admin.montre-d-art.store";
-// export const CLIENT_URL = "https://montre-d-art.store";
+export const CLIENT_URL = "https://watchstore.pp.ua";
 
 export const api = axios.create({
   baseURL: BASE_URL,
