@@ -38,7 +38,7 @@ const MyAccountSection = () => {
   ];
 
   const getDaysInMonth = (
-    month: string
+    month: string,
   ): { value: string; label: string }[] => {
     const daysInMonthMap: { [key: string]: number } = {
       january: 31,
@@ -140,17 +140,16 @@ const MyAccountSection = () => {
           return null;
         }
       },
-      date: (value, values) => {
+      date: (value: string, values: { month: string }) => {
         if (value) {
-          const month = values.month;
-          const maxDays = getDaysInMonth(month).length;
-          const dayNumber = Number(value);
+          const maxDays = getDaysInMonth(values.month).length;
+          const day = Number(value);
 
-          if (isNaN(dayNumber) || dayNumber < 1 || dayNumber > maxDays) {
+          if (day < 1 || day > maxDays) {
             return "Оберіть коректну дату";
           }
-          return null;
         }
+        return null;
       },
       address1: (value) => {
         if (!value.trim()) {
@@ -344,7 +343,7 @@ const MyAccountSection = () => {
             response1 = await addNewReceiver(
               values.name,
               values.email,
-              setInfoMessage
+              setInfoMessage,
             );
             if (response1 === 201) {
               setSubscribe(true);
@@ -557,7 +556,6 @@ const MyAccountSection = () => {
                   type="text"
                   bordered
                   fullWidth
-                  
                   {...form.getInputProps("address2")}
                 />
               </div>
