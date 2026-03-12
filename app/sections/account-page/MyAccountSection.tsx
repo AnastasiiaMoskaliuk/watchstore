@@ -151,7 +151,7 @@ const MyAccountSection = () => {
         }
         return null;
       },
-      address1: (value) => {
+      address1: (value:string) => {
         if (!value.trim()) {
           return "Оберіть місто зі списку";
         }
@@ -161,7 +161,7 @@ const MyAccountSection = () => {
         }
         return null;
       },
-      month: (value) => {
+      month: (value: string) => {
         const monthValues = months.map((month) => month.value);
         if (!monthValues.includes(value)) {
           return "Оберіть місяць зі списку";
@@ -178,7 +178,7 @@ const MyAccountSection = () => {
       remember: false,
     },
     validate: {
-      password: (value) => {
+      password: (value: string) => {
         if (/\s/.test(value)) return "Пароль не може містити пробілів";
         if (/[\u0400-\u04FF]/.test(value))
           return "Не дозволяються кириличні символи";
@@ -195,7 +195,7 @@ const MyAccountSection = () => {
         }
         return null;
       },
-      verify: (value, values) =>
+      verify: (value: string, values: { password: string; verify: string; remember: boolean })=>
         value !== values.password ? "Паролі не співпадають" : null,
     },
   });

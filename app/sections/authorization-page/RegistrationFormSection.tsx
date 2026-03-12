@@ -77,7 +77,7 @@ const RegistrationFormSection = () => {
   const [attempts, setAttempts] = useState(0);
   const [isDisabled, setIsDisabled] = useState(false);
   const [registrationMessage, setRegistrationMessage] = useState<string | null>(
-    null
+    null,
   );
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -90,7 +90,19 @@ const RegistrationFormSection = () => {
   const { setInfoMessage } = useAlert();
   const [isFailed, setIsFailed] = useState<boolean>(false);
 
-  const registrationForm = useForm({
+  const registrationForm = useForm<{
+    firstName: string;
+    lastName: string;
+    phone: string;
+    email: string;
+    month: string;
+    date: string;
+    confirmEmail: string;
+    password: string;
+    confirmPassword: string;
+    receiveUpdates: boolean;
+    registrationMessage: string;
+  }>({
     initialValues: {
       firstName: "",
       lastName: "",
@@ -107,7 +119,8 @@ const RegistrationFormSection = () => {
     validate: {
       firstName: hasLength({ min: 3 }, "Має бути не менше 3 символів"),
       lastName: hasLength({ min: 3 }, "Має бути не менше 3 символів"),
-      date: (value, values) => {
+
+      date: (value: string, values) => {
         if (!value) return "Необхідно заповнити день";
         const month = values.month;
         const maxDays = getDaysInMonth(month).length;
@@ -119,17 +132,21 @@ const RegistrationFormSection = () => {
 
         return null;
       },
-      month: (value) => {
+
+      month: (value: string) => {
         const monthValues = months.map((month) => month.value);
         if (!monthValues.includes(value)) {
           return "Оберіть місяць зі списку";
         }
         return null;
       },
+
       email: isEmail("Невірна електронна адреса"),
-      confirmEmail: (value, values) =>
+
+      confirmEmail: (value: string, values) =>
         value !== values.email ? "Електронні адреси повинні співпадати" : null,
-      password: (value) => {
+
+      password: (value: string) => {
         if (/\s/.test(value)) return "Пароль не може містити пробілів";
         if (/[\u0400-\u04FF]/.test(value))
           return "Не дозволяються кириличні символи";
@@ -141,10 +158,12 @@ const RegistrationFormSection = () => {
         if (!/[0-9]/.test(value)) return "Пароль повинен містити цифру";
         return null;
       },
-      confirmPassword: (value, values) =>
+
+      confirmPassword: (value: string, values) =>
         value !== values.password ? "Паролі повинні співпадати" : null,
-      phone: (value) => {
-        const operatorCode = registrationForm.values.phone.slice(3, 6);
+
+      phone: (value: string) => {
+        const operatorCode = value.slice(3, 6);
         if (
           !/^\+38\d{10}$/.test(value) ||
           !validOperators.includes(operatorCode)
@@ -188,7 +207,7 @@ const RegistrationFormSection = () => {
     ) {
       registrationForm.setFieldValue(
         "phone",
-        `+38${registrationForm.values.phone}`
+        `+38${registrationForm.values.phone}`,
       );
     }
     if (registrationForm.values.phone.length === 2) {
@@ -208,11 +227,11 @@ const RegistrationFormSection = () => {
         setAttempts(newAttempts);
         localStorage.setItem(
           "inputRegistrationAttempts",
-          newAttempts.toString()
+          newAttempts.toString(),
         );
         localStorage.setItem(
           "inputRegistrationTime",
-          new Date().getTime().toString()
+          new Date().getTime().toString(),
         );
         setIsLoading(true);
         const address = "";
@@ -231,7 +250,7 @@ const RegistrationFormSection = () => {
           dateOfBirth,
           password,
           address,
-          setInfoMessage
+          setInfoMessage,
         );
         setIsLoading(false);
         if (response === "created") {
@@ -240,19 +259,19 @@ const RegistrationFormSection = () => {
           registrationForm.reset();
         } else if (response == "A user with this phone number already exists") {
           setRegistrationMessage(
-            "Цей номер телефону вже існує. Спробуйте інший."
+            "Цей номер телефону вже існує. Спробуйте інший.",
           );
           setIsFailed(true);
         } else if (
           response == "A user with this email address already exists"
         ) {
           setRegistrationMessage(
-            "Ця електронна адреса вже існує. Спробуйте іншу."
+            "Ця електронна адреса вже існує. Спробуйте іншу.",
           );
           setIsFailed(true);
         } else if (response == "User not activated") {
           setRegistrationMessage(
-            "Ваш акаунт не активовано. Перевірте свою електронну пошту."
+            "Ваш акаунт не активовано. Перевірте свою електронну пошту.",
           );
           setIsFailed(true);
         } else {
@@ -438,9 +457,7 @@ const RegistrationFormSection = () => {
         <div className="mt-[16px]">
           <div>
             {registrationMessage && (
-              <span
-                className={`block text-center  text-[16px] text-darkBlack`}
-              >
+              <span className={`block text-center  text-[16px] text-darkBlack`}>
                 {registrationMessage}
               </span>
             )}
