@@ -1,7 +1,11 @@
-import React from "react";
 import type { Metadata } from "next";
+import { Loader } from "@mantine/core";
 
 import ArticleSection from "@/app/sections/article-page/ArticleSection";
+
+interface PageProps {
+  params: Promise<{ blogName: string }>;
+}
 
 export const metadata: Metadata = {
   title: "Montre d`Art — Стаття про годинники ",
@@ -16,8 +20,17 @@ export const metadata: Metadata = {
   ],
 };
 
-const Page = ({ params }: { params: any }) => {
-  const blogName = params.blogName;
+const Page = async ({ params }: PageProps) => {
+  const resolvedParams = await params;
+  const blogName = resolvedParams.blogName;
+
+  if (!blogName) {
+    return (
+      <div className="flex justify-center items-center min-h-[80vh] w-full">
+        <Loader className="animate-spin rounded-full border-4 border-darkBlack border-b-transparent w-10 h-10" />
+      </div>
+    );
+  }
 
   return (
     <>
