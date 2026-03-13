@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Loader } from "@mantine/core";
 import ProductSection from "@/app/sections/product-page/ProductSection";
 
-// Обов'язково типізуємо params як Promise
 interface PageProps {
   params: Promise<{ productName: string }>;
 }
