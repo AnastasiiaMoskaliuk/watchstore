@@ -13,7 +13,7 @@ const ArticleSection = ({ blogName }: { blogName: string }) => {
   const [articleData, setArticleData] = useState<BlogData>();
   const [isLoading, setIsLoading] = useState(false);
 
- useEffect(() => {
+  useEffect(() => {
     setTimeout(() => {
       setIsLoading(true);
     }, 1500);
@@ -86,35 +86,38 @@ const ArticleSection = ({ blogName }: { blogName: string }) => {
 
   return (
     <section className="mx-[50px] mb-[50px] mt-[15px] flex flex-col items-center md:mt-[20px] lg:mt-[50px]">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }}
-      />
-      <h1 className="font-frontrunner text-black text-center lg:leading-[60px] mb-4 md:mb-[20px] text-[25px] md:text-[35px] lg:text-[45px] lg:mb-[25px] xl:text-[60px] ">
-        {articleData?.heading || ""}
-      </h1>
+      <article>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }}
+        />
+        <meta name="description" content={articleData?.description} />
+        <h1 className="font-frontrunner text-black text-center lg:leading-[60px] mb-4 md:mb-[20px] text-[25px] md:text-[35px] lg:text-[45px] lg:mb-[25px] xl:text-[60px] ">
+          {articleData?.heading || ""}
+        </h1>
 
-      <hr className="bg-[#E5E8ED] w-[100%]" />
+        <hr className="bg-[#E5E8ED] w-[100%]" />
 
-      <div className="flex flex-col items-center gap-[50px] lg:items-start lg:flex-row lg:gap-[80px] pt-[32px] ">
-        {articleData && (
-          <div className="flex flex-col items-center lg:items-start gap-[20px] lg:w-[30%]">
-            <ArticleInformation />
-            <ShareSocialLinksComponent />
-          </div>
-        )}
-
-        <div className="flex flex-col items-start gap-[15px] md:gap-[24px] lg:w-[80%]">
-          <p className="text-[18px] font-bold lg:text-[20px]">
-            {articleData?.description}
-          </p>
-          {articleData?.paragraphs?.map(
-            (paragraph: Paragraph, index: number) => (
-              <ParagraphsComponent key={index} paragraph={paragraph} />
-            )
+        <div className="flex flex-col items-center gap-[50px] lg:items-start lg:flex-row lg:gap-[80px] pt-[32px] ">
+          {articleData && (
+            <div className="flex flex-col items-center lg:items-start gap-[20px] lg:w-[30%]">
+              <ArticleInformation />
+              <ShareSocialLinksComponent />
+            </div>
           )}
+
+          <div className="flex flex-col items-start gap-[15px] md:gap-[24px] lg:w-[80%]">
+            <p className="text-[18px] font-bold lg:text-[20px]">
+              {articleData?.description}
+            </p>
+            {articleData?.paragraphs?.map(
+              (paragraph: Paragraph, index: number) => (
+                <ParagraphsComponent key={index} paragraph={paragraph} />
+              ),
+            )}
+          </div>
         </div>
-      </div>
+      </article>
     </section>
   );
 };
