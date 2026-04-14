@@ -8,7 +8,7 @@ import HomeBlogSection from "./sections/home-page/HomeBlogSection";
 
 export const metadata: Metadata = {
   title: "Montre d`Art - головна сторінка",
-  description: "Дізнайтесь про нас більше",
+  description: "Montre d`Art - онлайн-магазин годинників.Тут Ви знайдете годинники за доступною ціною",
   keywords: ["Годинники", "Чернівці", "онлайн-магазин"],
   authors: { name: "Montre d`Art" },
   icons: { icon: "@/app/favicon.ico" },
