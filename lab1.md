@@ -18,50 +18,53 @@
 ### 3. Скріншот успішного deploy на Railway
 *Опис: Підтвердження статусу "Active" у панелі керування Railway для сервісу watchstore-bk.*
 
-* ![Railway Deployment Status Backend](images/seo/railway-status-bk.png)
-* ![Railway Deployment Status Fronted](images/seo/railway-status-ft.png)
+* ![Railway Deployment Status Backend](images/seo/lab1/railway-status-bk.png)
+* ![Railway Deployment Status Fronted](images/seo/lab1/railway-status-ft.png)
 
 ---
 
-### 4. Вміст файлу curl-result.txt з поясненням
-Підсумок перевірки сайту. Основна проблема зараз — відсутність опису для Google.
+### 4. Підключення домену до Railway
+Налаштування Railway:
+**Image:** ![domain](images/seo/lab1/domain.png)
+Налаштування домену:
+**Image:** ![dns](images/seo/lab1/dns.png)
+
+### 5. Дослідження - "Що бачить Google"
+
+### curl запит
+Отриманий HTML у файл:
+**html:** ![html](./curl-result.txt)
 
 ### Таблиця аналізу елементів
 
 | Елемент | Присутній | Що містить / Значення |
 | :--- | :---: | :--- |
-| **Текст статей** | ✅ Так | Тексти навігації та блок `articleData.description`. |
-| **Заголовок `<title>`** | ✅ Так | Назва сторінки (службовий елемент знайдено). |
-| **Опис `<meta description>`** | ❌ Ні |  Зараз порожньо. |
-| **Вміст `<body>`** | ✅ Так | Логотип, меню, поля "Ім'я" та "Email", скрипт SEO. |
+| **Текст** | ✅ Так | Назва ціна опис. |
+| **Заголовок `<title>`** | ✅ Так | Магазин годинників. |
+| **Опис `<meta description>`** | ✅ Так | Найкращі годинники за доступною ціною |
+| **Вміст `<body>`** | ✅ Так | Логотип, меню, товари |
 
-1. **Сайт працює:** Технічно все завантажується правильно.
-2. **SEO дирка:** Оскільки тег `meta name="description"` відсутній, Google сам буде "вигадувати" опис сайту в пошуку, і це може виглядати криво.
+### View Source в браузері
+**Image:** ![view-source](images/seo/lab1/view-source.png)
+Різниця: Результат curl запиту та View Source ідентичні. Обидва показують HTML який повернув сервер до виконання JS.
 
----
-
-### 5. Порівняльна таблиця curl vs View Source vs DevTools
-
-### Поріняльна таблиця 
-
-| Елемент аналізу | PowerShell (curl) | View Source (Браузер) | DevTools (F12) |
-| :--- | :--- | :--- | :--- |
-| **Основний контент** | ❌ **Порожньо**. Тільки технічні скрипти та каркас. | ❌ **Скелет (Skeleton)**. Видно класи `animate-pulse` та `bg-gray-300`. | ✅ **Повний текст**. Стаття "Як вибір годинників..." відображається повністю. |
-| **Meta Description** | ❌ **Відсутній**. Сервер не віддав опис у сирому запиті. | ✅ **Присутній**. Опис "Читайте статті про найкращі годинники..." є в коді. | ✅ **Присутній**. Аналогічно View Source. |
-| **Заголовок H1** | ❌ Порожній тег. | ❌ Порожній тег (клас `animate-pulse`). | ✅ Містить назву статті. |
-| **SEO Скрипти (JSON-LD)**| ✅ Присутні. | ✅ Присутні. | ✅ Присутні. |
-| **Статус рендерингу** | **Server Response** (Чистий HTML без JS) | **Hydration Start** (Початковий стан Next.js) | **Client-Side Rendered** (Фінальний вигляд) |
-
----
+### Google Cache перевірка
+Зафіксувати - чи знайдено сайт, як виглядає сніпет
+**Image:** ![google-cache](images/seo/lab1/google-cache.png)
 
 ### 6. Скріншот верифікації в Google Search Console
+Додано verification:
+**Image:** ![google-verify](images/seo/lab1/google-verify.png)
 
-**Image:** [google-search-console](images/seo/google-search-console.png)
+Сайт:
+**Image:** ![site](images/seo/lab1/site.png)
 
+Власник:
+**Image:** ![owner](images/seo/lab1/owner.png)
 
 ### 7. Скріншот запиту на індексацію
 
-**Image:** [indexing](images/seo/indexing.png)
+**Image:** ![indexing](images/seo/lab1/indexing.png)
 
 ### 8. Відповідь на питання: "Що побачить Google crawler на вашому сайті і чому це може бути проблемою?"
 
