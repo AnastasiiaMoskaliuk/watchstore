@@ -25,15 +25,20 @@
 
 ### 4. Підключення домену до Railway
 Налаштування Railway:
+
 **Image:** ![domain](images/seo/lab1/domain.png)
+
+
 Налаштування домену:
+
 **Image:** ![dns](images/seo/lab1/dns.png)
 
 ### 5. Дослідження - "Що бачить Google"
 
 ### curl запит
 Отриманий HTML у файл:
-**html:** ![html](./curl-result.txt)
+
+[html](./curl-result.txt)
 
 ### Таблиця аналізу елементів
 
@@ -50,6 +55,7 @@
 
 ### Google Cache перевірка
 Зафіксувати - чи знайдено сайт, як виглядає сніпет
+
 **Image:** ![google-cache](images/seo/lab1/google-cache.png)
 
 ### 6. Скріншот верифікації в Google Search Console
@@ -57,9 +63,11 @@
 **Image:** ![google-verify](images/seo/lab1/google-verify.png)
 
 Сайт:
+
 **Image:** ![site](images/seo/lab1/site.png)
 
 Власник:
+
 **Image:** ![owner](images/seo/lab1/owner.png)
 
 ### 7. Скріншот запиту на індексацію
