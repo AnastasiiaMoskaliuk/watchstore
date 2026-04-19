@@ -115,6 +115,8 @@ const CategorySection = ({
     setSort(newValue);
   };
 
+
+  
   return (
     <section className="px-5 lg:px-[60px] md:px-[30px] xl:pr-[0px] xl:pt-[43px] pb-[70px] flex-1">
       <div
