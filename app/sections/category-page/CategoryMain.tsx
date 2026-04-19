@@ -13,22 +13,22 @@ import { PaginationProvider } from "@/hooks/useCustomPagination";
 export const ProductsContext = createContext<CardProps[]>([]);
 const LIMIT = 12;
 
- const [products, setProducts] = useState<CardProps[]>([]);
-  const [totalProducts, setTotalProducts] = useState<number>(0);
+const [products, setProducts] = useState<CardProps[]>([]);
+const [totalProducts, setTotalProducts] = useState<number>(0);
 
-  const categorySchema = {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    name: "Годинники для кожного моменту",
-    numberOfItems: totalProducts,
-    itemListElement: products.map((product: CardProps, index: number) => ({
-      "@type": "ListItem",
-      position: index + 1,
-      url: `https://watchstore.pp.ua/product/${product.handle}`,
-      name: product.title,
-      image: product.image,
-    })),
-  };
+const categorySchema = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  name: "Годинники для кожного моменту",
+  numberOfItems: totalProducts,
+  itemListElement: products.map((product: CardProps, index: number) => ({
+    "@type": "ListItem",
+    position: index + 1,
+    url: `https://watchstore.pp.ua/product/${product.handle}`,
+    name: product.title,
+    image: product.image,
+  })),
+};
 const CategoryMain = () => {
   const [filters, setFilters] = useState({});
   const [totalProducts, setTotalProducts] = useState<number>(0);
@@ -44,17 +44,17 @@ const CategoryMain = () => {
   const { setInfoMessage } = useAlert();
 
   useEffect(() => {
-const fetchFilters = async () => {
-  const data = await getFilters(setInfoMessage);
+    const fetchFilters = async () => {
+      const data = await getFilters(setInfoMessage);
 
-  console.log("filters response:", data);
-  const maxPrice = data?.priceRange?.values?.[0]?.value?.[1];
+      console.log("filters response:", data);
+      const maxPrice = data?.priceRange?.values?.[0]?.value?.[1];
 
-  if (maxPrice !== undefined && maxPrice !== 10) {
-    setFilters(data);
-    setIsFilter(true);
-  }
-};
+      if (maxPrice !== undefined && maxPrice !== 10) {
+        setFilters(data);
+        setIsFilter(true);
+      }
+    };
     fetchFilters();
   }, []);
 
@@ -125,19 +125,17 @@ const fetchFilters = async () => {
               isSearchLoading={isSearchLoading}
             />
           </div>
+          <Script
+            id="category-schema"
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(categorySchema),
+            }}
+          />
         </ProductsContext.Provider>
       </PaginationProvider>
-      <Script
-        id="category-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(categorySchema),
-        }}
-      />
     </>
   );
-
-  
 };
 
 export default CategoryMain;
