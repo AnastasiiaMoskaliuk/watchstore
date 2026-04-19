@@ -1,4 +1,5 @@
 "use client";
+import Script from "next/script";
 import React, { useState, createContext, useEffect } from "react";
 
 import { CardProps } from "@/config/types";
@@ -12,6 +13,22 @@ import { PaginationProvider } from "@/hooks/useCustomPagination";
 export const ProductsContext = createContext<CardProps[]>([]);
 const LIMIT = 12;
 
+ const [products, setProducts] = useState<CardProps[]>([]);
+  const [totalProducts, setTotalProducts] = useState<number>(0);
+
+  const categorySchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "Годинники для кожного моменту",
+    numberOfItems: totalProducts,
+    itemListElement: products.map((product: CardProps, index: number) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      url: `https://watchstore.pp.ua/product/${product.handle}`,
+      name: product.title,
+      image: product.image,
+    })),
+  };
 const CategoryMain = () => {
   const [filters, setFilters] = useState({});
   const [totalProducts, setTotalProducts] = useState<number>(0);
@@ -110,8 +127,17 @@ const fetchFilters = async () => {
           </div>
         </ProductsContext.Provider>
       </PaginationProvider>
+      <Script
+        id="category-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(categorySchema),
+        }}
+      />
     </>
   );
+
+  
 };
 
 export default CategoryMain;
