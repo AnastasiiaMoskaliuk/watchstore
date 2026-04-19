@@ -25,20 +25,37 @@ const CategoryMain = () => {
   const [isOpenFilters, setIsOpenFilters] = useState(false);
   const [isSearchLoading, setIsSearchLoading] = useState(false);
 
-  const categorySchema = {
+  const catalogSchema = {
     "@context": "https://schema.org",
-    "@type": "ItemList",
-    name: "Годинники для кожного моменту",
-    numberOfItems: totalProducts,
-    itemListElement: products.map((product: CardProps, index: number) => ({
-      "@type": "ListItem",
-      position: index + 1,
-      url: `https://watchstore.pp.ua/catalog/${product.handle}`,
-      name: product.title,
-      image: product.image,
-    })),
+    "@type": "CollectionPage",
+    name: "Каталог годинників",
+    description:
+      "Каталог стильних чоловічих та жіночих годинників з доставкою по Україні.",
+    url: "https://watchstore.pp.ua/catalog",
+    mainEntity: {
+      "@type": "ItemList",
+      name: "Годинники",
+      itemListElement: products.map((product, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        item: {
+          "@type": "Product",
+          name: product.title,
+          image: product.image,
+          offers: {
+            "@type": "Offer",
+            price: String(product.price),
+            priceCurrency: "UAH",
+            availability:
+              product.quantity > 0
+                ? "https://schema.org/InStock"
+                : "https://schema.org/OutOfStock",
+            url: `https://watchstore.pp.ua/product/${product.handle}`,
+          },
+        },
+      })),
+    },
   };
-  
   const { setInfoMessage } = useAlert();
 
   useEffect(() => {
@@ -124,10 +141,10 @@ const CategoryMain = () => {
             />
           </div>
           <Script
-            id="category-schema"
+            id="catalog-schema"
             type="application/ld+json"
             dangerouslySetInnerHTML={{
-              __html: JSON.stringify(categorySchema),
+              __html: JSON.stringify(catalogSchema),
             }}
           />
         </ProductsContext.Provider>
