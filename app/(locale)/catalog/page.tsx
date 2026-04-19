@@ -4,6 +4,9 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Montre d`Art - каталог",
   description: "Пропонуємо найбільший вибір годиннників",
+  alternates: {
+    canonical: "https://watchstore.pp.ua/catalog",
+  },
   keywords: [
     "Годинники",
     "Чернівці",
