@@ -64,7 +64,7 @@ const CategoryMain = () => {
               ? "https://schema.org/InStock"
               : "https://schema.org/OutOfStock",
 
-          url: `https://watchstore.pp.ua/product/${product.handle}`,
+          url: `https://watchstore.pp.ua/catalog/${product.handle}`,
         },
       },
     })) || [],
