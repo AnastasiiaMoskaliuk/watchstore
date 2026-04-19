@@ -26,36 +26,51 @@ const CategoryMain = () => {
   const [isSearchLoading, setIsSearchLoading] = useState(false);
 
   const catalogSchema = {
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    name: "Каталог годинників",
-    description:
-      "Каталог стильних чоловічих та жіночих годинників з доставкою по Україні.",
-    url: "https://watchstore.pp.ua/catalog",
-    mainEntity: {
-      "@type": "ItemList",
-      name: "Годинники",
-      itemListElement: products.map((product, index) => ({
-        "@type": "ListItem",
-        position: index + 1,
-        item: {
-          "@type": "Product",
-          name: product.title,
-          image: product.image,
-          offers: {
-            "@type": "Offer",
-            price: String(product.price),
-            priceCurrency: "UAH",
-            availability:
-              product.quantity > 0
-                ? "https://schema.org/InStock"
-                : "https://schema.org/OutOfStock",
-            url: `https://watchstore.pp.ua/product/${product.handle}`,
-          },
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+
+  name: "Каталог годинників",
+  description:
+    "Каталог стильних чоловічих та жіночих годинників з доставкою по Україні. Обирайте класичні, спортивні та преміум моделі.",
+
+  url: "https://watchstore.pp.ua/catalog",
+
+  mainEntity: {
+    "@type": "ItemList",
+    name: "Годинники",
+    numberOfItems: products?.length || 0,
+
+    itemListElement: products?.map((product, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+
+      item: {
+        "@type": "Product",
+        name: product.title,
+
+        image: product.image
+          ? product.image
+          : "https://watchstore.pp.ua/default-watch.jpg",
+
+        sku: product.id,
+
+        offers: {
+          "@type": "Offer",
+          price: String(product.price ?? 0),
+          priceCurrency: "UAH",
+
+          availability:
+            product.quantity > 0
+              ? "https://schema.org/InStock"
+              : "https://schema.org/OutOfStock",
+
+          url: `https://watchstore.pp.ua/product/${product.handle}`,
         },
-      })),
-    },
-  };
+      },
+    })) || [],
+  },
+};
+
   const { setInfoMessage } = useAlert();
 
   useEffect(() => {
