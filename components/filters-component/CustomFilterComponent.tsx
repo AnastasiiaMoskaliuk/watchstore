@@ -166,6 +166,7 @@ const CustomFilterComponent: FC<FilterComponentProps> = ({
             <div className=" flex flex-row flex-wrap gap-[5px]">
               {items?.map((btn) => (
                 <button
+                rel="canonical"
                   key={btn}
                   onClick={(e) => {
                     e.preventDefault();
