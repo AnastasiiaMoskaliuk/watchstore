@@ -1,4 +1,5 @@
 "use client";
+import Script from "next/script";
 import React, { useState, createContext, useEffect } from "react";
 
 import { CardProps } from "@/config/types";
@@ -24,20 +25,34 @@ const CategoryMain = () => {
   const [isOpenFilters, setIsOpenFilters] = useState(false);
   const [isSearchLoading, setIsSearchLoading] = useState(false);
 
+  const categorySchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "Годинники для кожного моменту",
+    numberOfItems: totalProducts,
+    itemListElement: products.map((product: CardProps, index: number) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      url: `https://watchstore.pp.ua/catalog/${product.handle}`,
+      name: product.title,
+      image: product.image,
+    })),
+  };
+  
   const { setInfoMessage } = useAlert();
 
   useEffect(() => {
-const fetchFilters = async () => {
-  const data = await getFilters(setInfoMessage);
+    const fetchFilters = async () => {
+      const data = await getFilters(setInfoMessage);
 
-  console.log("filters response:", data);
-  const maxPrice = data?.priceRange?.values?.[0]?.value?.[1];
+      console.log("filters response:", data);
+      const maxPrice = data?.priceRange?.values?.[0]?.value?.[1];
 
-  if (maxPrice !== undefined && maxPrice !== 10) {
-    setFilters(data);
-    setIsFilter(true);
-  }
-};
+      if (maxPrice !== undefined && maxPrice !== 10) {
+        setFilters(data);
+        setIsFilter(true);
+      }
+    };
     fetchFilters();
   }, []);
 
@@ -108,6 +123,13 @@ const fetchFilters = async () => {
               isSearchLoading={isSearchLoading}
             />
           </div>
+          <Script
+            id="category-schema"
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(categorySchema),
+            }}
+          />
         </ProductsContext.Provider>
       </PaginationProvider>
     </>

@@ -74,7 +74,7 @@ const ProductSection: FC<productProps> = ({ productName }) => {
       try {
         const productData: Product = await getProductByHandle(
           productName,
-          setInfoMessage
+          setInfoMessage,
         );
         if (productData) {
           setProduct(productData);
@@ -90,7 +90,7 @@ const ProductSection: FC<productProps> = ({ productName }) => {
         console.error("Failed to fetch product data:", error);
       }
     };
-console.log("ПЕРЕВІРКА ПРОПСІВ:", productName)
+    console.log("ПЕРЕВІРКА ПРОПСІВ:", productName);
     fetchProduct();
   }, [productName]);
 
@@ -101,7 +101,6 @@ console.log("ПЕРЕВІРКА ПРОПСІВ:", productName)
       </div>
     );
   }
-  
 
   let higherDescription: string[] = [];
   let lowerDescription: any[] = [];
@@ -136,7 +135,7 @@ console.log("ПЕРЕВІРКА ПРОПСІВ:", productName)
           quantity: quantity,
           maxQuantity: maxQuantity,
         },
-        quantity
+        quantity,
       );
     }
   };
@@ -145,15 +144,21 @@ console.log("ПЕРЕВІРКА ПРОПСІВ:", productName)
     "@context": "https://schema.org",
     "@type": "Product",
     name: product?.title,
-    image: product?.images[0],
-    description: product?.description,
-    brand: product?.vendor,
+    image: product?.images,
+    description: product?.description ?? "Купити якісний годинник з доставкою по Україні.",
+    brand: {
+      "@type": "Brand",
+      name: product?.vendor,
+    },
     offers: {
       "@type": "Offer",
       priceCurrency: "UAH",
       price: product?.price,
-      availability: product?.quantity,
-      url: `https://https://watchstore.pp.ua/product/${product?.handle}`,
+      availability:
+        (product?.quantity ?? 0) > 0
+          ? "https://schema.org/InStock"
+          : "https://schema.org/OutOfStock",
+      url: `https://watchstore.pp.ua/product/${product?.handle}`,
     },
   };
 
@@ -195,14 +200,13 @@ console.log("ПЕРЕВІРКА ПРОПСІВ:", productName)
           ))}
         </div>
 
-
         <div className="flex flex-col items-center xl:hidden">
           <Carousel
             className="group flex items-center max-w-[550px]"
             slideGap="lg"
             loop
             getEmblaApi={(api) => setEmbla(api)}
-            onSlideChange={setActiveSlide} 
+            onSlideChange={setActiveSlide}
             nextControlIcon={
               <Image
                 src={RightArrow}
@@ -227,7 +231,7 @@ console.log("ПЕРЕВІРКА ПРОПСІВ:", productName)
             {product?.images?.slice(0, 6).map((item, index) => (
               <button
                 key={index}
-                onClick={() => setActiveSlide(index)} 
+                onClick={() => setActiveSlide(index)}
                 className="focus:outline-hidden"
               >
                 <Image
@@ -236,7 +240,9 @@ console.log("ПЕРЕВІРКА ПРОПСІВ:", productName)
                   height={100}
                   alt={`Mini-image ${index}`}
                   className={`object-cover rounded-lg cursor-pointer opacity-[50%]${
-                    activeSlide === index ? "opacity-[100%] ring-2 ring-darkBlack" : ""
+                    activeSlide === index
+                      ? "opacity-[100%] ring-2 ring-darkBlack"
+                      : ""
                   }`}
                 />
               </button>
@@ -254,7 +260,7 @@ console.log("ПЕРЕВІРКА ПРОПСІВ:", productName)
               <>
                 <span className="text-[16px] xl:text-[22px] ml-[8px] text-[grey] mt-[5px] line-through">
                   {Number(
-                    Number(product?.price) / (1 - product?.discount / 100)
+                    Number(product?.price) / (1 - product?.discount / 100),
                   ).toFixed(2)}
                 </span>
 
@@ -276,6 +282,9 @@ console.log("ПЕРЕВІРКА ПРОПСІВ:", productName)
           </div>
 
           <div className="w-full xl:w-[80%]">
+            <h3 className="text-[20px] mt-[20px] font-semibold text-left w-full xl:w-[80%]">
+              Опис товару
+            </h3>
             {higherDescription.length > 0 ? (
               higherDescription.map((paragraph, index) => (
                 <p
@@ -297,6 +306,9 @@ console.log("ПЕРЕВІРКА ПРОПСІВ:", productName)
           <hr className="block w-full xl:w-[80%]" />
 
           <div className="my-[15px] w-full xl:w-[80%] text-silver text-[14px] text-center space-y-[10px]">
+            <h3 className="text-[20px] mt-[20px] font-semibold w-full xl:w-[80%] text-left">
+              Характеристики
+            </h3>
             {lowerDescription.length != 0 ? (
               lowerDescription.map((property, index) => (
                 <div key={index} className="flex justify-between items-start">
@@ -319,9 +331,7 @@ console.log("ПЕРЕВІРКА ПРОПСІВ:", productName)
           <hr className="block w-full xl:w-[80%]" />
 
           {isOutOfStock && (
-            <p className="text-vividRed mt-[25px]">
-              Товару немає в наявності!
-            </p>
+            <p className="text-vividRed mt-[25px]">Товару немає в наявності!</p>
           )}
 
           <div className="flex items-center my-[25px] space-x-[40px] w-full xl:w-[80%]">

@@ -75,14 +75,14 @@ const CustomFilterComponent: FC<FilterComponentProps> = ({
             type === "checkboxes" ? "cursor-pointer" : ""
           }`}
           onClick={toggleOpen}>
-          <h3 className="font-semibold text-[18px] relative">
+          <h2 className="font-semibold text-[18px] relative">
             {title}
             {selectedItems && selectedItems.length > 0 && (
               <span className="absolute -right-5 top-0 w-4 h-4 text-[10px] text-white bg-darkBlack rounded-full flex items-center justify-center">
                 {selectedItems.length}
               </span>
             )}
-          </h3>
+          </h2>
 
           {type === "checkboxes" && (
             <motion.div
