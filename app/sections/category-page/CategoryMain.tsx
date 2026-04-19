@@ -24,7 +24,7 @@ const categorySchema = {
   itemListElement: products.map((product: CardProps, index: number) => ({
     "@type": "ListItem",
     position: index + 1,
-    url: `https://watchstore.pp.ua/product/${product.handle}`,
+    url: `https://watchstore.pp.ua/catalog/${product.handle}`,
     name: product.title,
     image: product.image,
   })),
