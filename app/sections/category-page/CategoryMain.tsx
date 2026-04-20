@@ -1,6 +1,6 @@
 "use client";
 import Script from "next/script";
-import React, { useState, createContext, useEffect } from "react";
+import React, { useState, createContext, useEffect, useMemo } from "react";
 
 import { CardProps } from "@/config/types";
 import CategorySection from "./CategorySection";
@@ -25,52 +25,40 @@ const CategoryMain = () => {
   const [isOpenFilters, setIsOpenFilters] = useState(false);
   const [isSearchLoading, setIsSearchLoading] = useState(false);
 
-  const catalogSchema = {
-  "@context": "https://schema.org",
-  "@type": "CollectionPage",
+const catalogSchema = useMemo(() => {
+    if (!products || products.length === 0) return null;
 
-  name: "Каталог годинників",
-  description:
-    "Каталог стильних чоловічих та жіночих годинників з доставкою по Україні. Обирайте класичні, спортивні та преміум моделі.",
-
-  url: "https://watchstore.pp.ua/catalog",
-
-  mainEntity: {
-    "@type": "ItemList",
-    name: "Годинники",
-    numberOfItems: products?.length || 0,
-
-    itemListElement: products?.map((product, index) => ({
-      "@type": "ListItem",
-      position: index + 1,
-
-      item: {
-        "@type": "Product",
-        name: product.title,
-
-        image: product.image
-          ? product.image
-          : "https://watchstore.pp.ua/default-watch.jpg",
-
-        sku: product.id,
-
-        offers: {
-          "@type": "Offer",
-          price: String(product.price ?? 0),
-          priceCurrency: "UAH",
-
-          availability:
-            product.quantity > 0
-              ? "https://schema.org/InStock"
-              : "https://schema.org/OutOfStock",
-
-          url: `https://watchstore.pp.ua/catalog/${product.handle}`,
-        },
+    return {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": "Каталог годинників",
+      "description": "Каталог стильних чоловічих та жіночих годинників з доставкою по Україні.",
+      "url": "https://watchstore.pp.ua/catalog",
+      "mainEntity": {
+        "@type": "ItemList",
+        "numberOfItems": products.length,
+        "itemListElement": products.map((product, index) => ({
+          "@type": "ListItem",
+          "position": index + 1,
+          "item": {
+            "@type": "Product",
+            "name": product.title,
+            "image": product.image || "https://watchstore.pp.ua/default-watch.jpg",
+            "sku": product.id.split('/').pop(), 
+            "offers": {
+              "@type": "Offer",
+              "price": parseFloat(String(product.price)).toFixed(2), 
+              "priceCurrency": "UAH",
+              "availability": product.quantity > 0 
+                ? "https://schema.org/InStock" 
+                : "https://schema.org/OutOfStock",
+              "url": `https://watchstore.pp.ua/catalog/${product.handle}`,
+            },
+          },
+        })),
       },
-    })) || [],
-  },
-};
-
+    };
+  }, [products]);
   const { setInfoMessage } = useAlert();
 
   useEffect(() => {
