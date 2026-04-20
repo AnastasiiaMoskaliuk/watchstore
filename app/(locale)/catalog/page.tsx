@@ -39,10 +39,21 @@ export const generateViewport = () => ({
 	width: "device-width",
  });
 
-export default function CategoryPage() {
+import { getProducts } from "@/services/ProductService"; // Перевірте чи правильний шлях до вашого сервісу
+
+export default async function CategoryPage() {
+  // Отримуємо товари безпосередньо на сервері перед рендерингом сторінки
+  // {} - це порожній фільтр, щоб отримати початковий список
+  const productsData = await getProducts({}); 
+
+  // Витягуємо масив товарів. 
+  // Залежно від того, що повертає ваш Shopify сервіс, це може бути productsData або productsData.products
+  const initialProducts = productsData?.products || productsData || [];
+
   return (
     <>
-      <CategoryMain />
+      {/* Передаємо отримані товари в CategoryMain */}
+      <CategoryMain initialProducts={initialProducts} />
     </>
   );
 }
