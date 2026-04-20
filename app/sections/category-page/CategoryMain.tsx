@@ -1,42 +1,48 @@
 "use client";
 import Script from "next/script";
 import React, { useState, createContext, useEffect, useMemo } from "react";
-
 import { CardProps } from "@/config/types";
 import CategorySection from "./CategorySection";
 import { useAlert } from "@/hooks/alertContext";
 import { getFilters } from "@/services/ProductService";
 import CategoryAsideFilters from "./CategoryAsideFilters";
-import TitleComponents from "@/components/TitleComponents";
 import { PaginationProvider } from "@/hooks/useCustomPagination";
 
 export const ProductsContext = createContext<CardProps[]>([]);
 const LIMIT = 12;
 
-const CategoryMain = () => {
+// Приймаємо початкові товари з сервера через пропси
+const CategoryMain = ({ initialProducts = [] }: { initialProducts?: CardProps[] }) => {
   const [filters, setFilters] = useState({});
-  const [totalProducts, setTotalProducts] = useState<number>(0);
-  const [products, setProducts] = useState<CardProps[]>([]);
+  
+  // Ініціалізація стану даними з сервера (це важливо для SEO)
+  const [products, setProducts] = useState<CardProps[]>(initialProducts);
+  const [totalProducts, setTotalProducts] = useState<number>(initialProducts.length);
+  
   const [isStart, setIsStart] = useState<boolean>(true);
   const [isFilter, setIsFilter] = useState<boolean>(false);
   const [sort, setSort] = useState<string>("CREATED_AT");
   const [reverse, setReverse] = useState<boolean>(true);
-
   const [isOpenFilters, setIsOpenFilters] = useState(false);
   const [isSearchLoading, setIsSearchLoading] = useState(false);
 
-const catalogSchema = useMemo(() => {
+  const { setInfoMessage } = useAlert();
+
+  // Побудова схеми для Google
+  const catalogSchema = useMemo(() => {
+    // Якщо товарів немає, не створюємо схему взагалі
     if (!products || products.length === 0) return null;
 
     return {
       "@context": "https://schema.org",
       "@type": "CollectionPage",
       "name": "Каталог годинників",
-      "description": "Каталог стильних чоловічих та жіночих годинників з доставкою по Україні.",
+      "description": "Каталог годинників з доставкою по Україні.",
       "url": "https://watchstore.pp.ua/catalog",
       "mainEntity": {
         "@type": "ItemList",
-        "numberOfItems": products.length,
+        "name": "Годинники",
+        "numberOfItems": totalProducts || products.length,
         "itemListElement": products.map((product, index) => ({
           "@type": "ListItem",
           "position": index + 1,
@@ -44,10 +50,10 @@ const catalogSchema = useMemo(() => {
             "@type": "Product",
             "name": product.title,
             "image": product.image || "https://watchstore.pp.ua/default-watch.jpg",
-            "sku": product.id.split('/').pop(), 
+            "sku": product.id?.toString().split('/').pop() || product.id,
             "offers": {
               "@type": "Offer",
-              "price": parseFloat(String(product.price)).toFixed(2), 
+              "price": parseFloat(String(product.price || 0)).toFixed(2),
               "priceCurrency": "UAH",
               "availability": product.quantity > 0 
                 ? "https://schema.org/InStock" 
@@ -58,60 +64,29 @@ const catalogSchema = useMemo(() => {
         })),
       },
     };
-  }, [products]);
-  const { setInfoMessage } = useAlert();
+  }, [products, totalProducts]);
 
+  // Завантаження фільтрів (працює на клієнті)
   useEffect(() => {
     const fetchFilters = async () => {
       const data = await getFilters(setInfoMessage);
-
-      console.log("filters response:", data);
-      const maxPrice = data?.priceRange?.values?.[0]?.value?.[1];
-
-      if (maxPrice !== undefined && maxPrice !== 10) {
+      if (data?.priceRange?.values?.[0]?.value?.[1] !== undefined) {
         setFilters(data);
         setIsFilter(true);
       }
     };
     fetchFilters();
-  }, []);
+  }, [setInfoMessage]);
 
-  const handleChangeTotalProducts = (num: number) => {
-    setTotalProducts(num);
-  };
-
-  const handleUpdateProducts = (newProducts: CardProps[]) => {
-    setProducts(newProducts);
-  };
-
-  const handleToggleFilter = (value: boolean) => {
-    setIsOpenFilters(value);
-  };
-
-  const handleToggleIsSearch = (value: boolean) => {
-    setIsSearchLoading(value);
-  };
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-
-    if (isOpenFilters) {
-      document.documentElement.classList.add("overflow-hidden");
-    } else {
-      document.documentElement.classList.remove("overflow-hidden");
-    }
-
-    return () => document.documentElement.classList.remove("overflow-hidden");
-  }, [isOpenFilters]);
+  const handleChangeTotalProducts = (num: number) => setTotalProducts(num);
+  const handleUpdateProducts = (newProducts: CardProps[]) => setProducts(newProducts);
+  const handleToggleFilter = (value: boolean) => setIsOpenFilters(value);
+  const handleToggleIsSearch = (value: boolean) => setIsSearchLoading(value);
 
   return (
     <>
       <PaginationProvider>
         <ProductsContext.Provider value={products}>
-          <TitleComponents
-            text="Годинники для кожного моменту"
-            additionalText={`Кількість годинників: ${totalProducts} `}
-          />
           <div className="xl:flex xl:pr-[60px] xl:pl-[75px]">
             <CategoryAsideFilters
               isFilter={isFilter}
@@ -143,13 +118,18 @@ const catalogSchema = useMemo(() => {
               isSearchLoading={isSearchLoading}
             />
           </div>
-          <Script
-            id="catalog-schema"
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{
-              __html: JSON.stringify(catalogSchema),
-            }}
-          />
+
+          {/* Вивід JSON-LD скрипта */}
+          {products.length > 0 && catalogSchema && (
+            <Script
+              id="catalog-schema"
+              type="application/ld+json"
+              strategy="afterInteractive"
+              dangerouslySetInnerHTML={{
+                __html: JSON.stringify(catalogSchema),
+              }}
+            />
+          )}
         </ProductsContext.Provider>
       </PaginationProvider>
     </>
