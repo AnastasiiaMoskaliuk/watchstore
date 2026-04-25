@@ -145,7 +145,9 @@ const ProductSection: FC<productProps> = ({ productName }) => {
     "@type": "Product",
     name: product?.title,
     image: product?.images,
-    description: product?.description ?? "Купити якісний годинник з доставкою по Україні.",
+    description:
+      product?.description ?? "Купити якісний годинник з доставкою по Україні.",
+    sku: product?.id,
     brand: {
       "@type": "Brand",
       name: product?.vendor,
@@ -158,7 +160,7 @@ const ProductSection: FC<productProps> = ({ productName }) => {
         (product?.quantity ?? 0) > 0
           ? "https://schema.org/InStock"
           : "https://schema.org/OutOfStock",
-      url: `https://watchstore.pp.ua/product/${product?.handle}`,
+      url: `https://watchstore.pp.ua/catalog/${product?.handle}`,
     },
   };
 
