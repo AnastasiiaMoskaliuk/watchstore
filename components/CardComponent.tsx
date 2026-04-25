@@ -59,6 +59,8 @@ const CardComponent: FC<CardProps & { className?: string }> = ({
             height={440}
             alt={`image of ${title}`}
             className="object-cover h-[240px] md:h-[320px] group-hover/card:scale-110 duration-300"
+            loading="lazy"
+            fetchPriority="high"
           />
         </div>
         {quantity > 0 ? null : (
