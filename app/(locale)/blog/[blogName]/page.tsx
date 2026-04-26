@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Loader } from "@mantine/core";
 
-import RelatedBlogs from "@/app/sections/article-page/RelatedBlogs";
 import ArticleSection from "@/app/sections/article-page/ArticleSection";
 
 interface PageProps {
@@ -36,7 +35,6 @@ const Page = async ({ params }: PageProps) => {
   return (
     <>
       <ArticleSection blogName={blogName} />
-      <RelatedBlogs currentHandle={blogName} />
     </>
   );
 };

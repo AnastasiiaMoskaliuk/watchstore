@@ -7,18 +7,25 @@ import { useAlert } from "@/hooks/alertContext";
 import { getFilters } from "@/services/ProductService";
 import CategoryAsideFilters from "./CategoryAsideFilters";
 import { PaginationProvider } from "@/hooks/useCustomPagination";
+import RecommendedProducts from "./RecommendedProducts";
 
 export const ProductsContext = createContext<CardProps[]>([]);
 const LIMIT = 12;
 
 // Приймаємо початкові товари з сервера через пропси
-const CategoryMain = ({ initialProducts = [] }: { initialProducts?: CardProps[] }) => {
+const CategoryMain = ({
+  initialProducts = [],
+}: {
+  initialProducts?: CardProps[];
+}) => {
   const [filters, setFilters] = useState({});
-  
+
   // Ініціалізація стану даними з сервера (це важливо для SEO)
   const [products, setProducts] = useState<CardProps[]>(initialProducts);
-  const [totalProducts, setTotalProducts] = useState<number>(initialProducts.length);
-  
+  const [totalProducts, setTotalProducts] = useState<number>(
+    initialProducts.length,
+  );
+
   const [isStart, setIsStart] = useState<boolean>(true);
   const [isFilter, setIsFilter] = useState<boolean>(false);
   const [sort, setSort] = useState<string>("CREATED_AT");
@@ -28,37 +35,37 @@ const CategoryMain = ({ initialProducts = [] }: { initialProducts?: CardProps[] 
 
   const { setInfoMessage } = useAlert();
 
-  // Побудова схеми для Google
   const catalogSchema = useMemo(() => {
-    // Якщо товарів немає, не створюємо схему взагалі
     if (!products || products.length === 0) return null;
 
     return {
       "@context": "https://schema.org",
       "@type": "CollectionPage",
-      "name": "Каталог годинників",
-      "description": "Каталог годинників з доставкою по Україні.",
-      "url": "https://watchstore.pp.ua/catalog",
-      "mainEntity": {
+      name: "Каталог годинників",
+      description: "Каталог годинників з доставкою по Україні.",
+      url: "https://watchstore.pp.ua/catalog",
+      mainEntity: {
         "@type": "ItemList",
-        "name": "Годинники",
-        "numberOfItems": totalProducts || products.length,
-        "itemListElement": products.map((product, index) => ({
+        name: "Годинники",
+        numberOfItems: totalProducts || products.length,
+        itemListElement: products.map((product, index) => ({
           "@type": "ListItem",
-          "position": index + 1,
-          "item": {
+          position: index + 1,
+          item: {
             "@type": "Product",
-            "name": product.title,
-            "image": product.image || "https://watchstore.pp.ua/default-watch.jpg",
-            "sku": product.id?.toString().split('/').pop() || product.id,
-            "offers": {
+            name: product.title,
+            image:
+              product.image || "https://watchstore.pp.ua/default-watch.jpg",
+            sku: product.id?.toString().split("/").pop() || product.id,
+            offers: {
               "@type": "Offer",
-              "price": parseFloat(String(product.price || 0)).toFixed(2),
-              "priceCurrency": "UAH",
-              "availability": product.quantity > 0 
-                ? "https://schema.org/InStock" 
-                : "https://schema.org/OutOfStock",
-              "url": `https://watchstore.pp.ua/catalog/${product.handle}`,
+              price: parseFloat(String(product.price || 0)).toFixed(2),
+              priceCurrency: "UAH",
+              availability:
+                product.quantity > 0
+                  ? "https://schema.org/InStock"
+                  : "https://schema.org/OutOfStock",
+              url: `https://watchstore.pp.ua/catalog/${product.handle}`,
             },
           },
         })),
@@ -66,7 +73,6 @@ const CategoryMain = ({ initialProducts = [] }: { initialProducts?: CardProps[] 
     };
   }, [products, totalProducts]);
 
-  // Завантаження фільтрів (працює на клієнті)
   useEffect(() => {
     const fetchFilters = async () => {
       const data = await getFilters(setInfoMessage);
@@ -79,7 +85,8 @@ const CategoryMain = ({ initialProducts = [] }: { initialProducts?: CardProps[] 
   }, [setInfoMessage]);
 
   const handleChangeTotalProducts = (num: number) => setTotalProducts(num);
-  const handleUpdateProducts = (newProducts: CardProps[]) => setProducts(newProducts);
+  const handleUpdateProducts = (newProducts: CardProps[]) =>
+    setProducts(newProducts);
   const handleToggleFilter = (value: boolean) => setIsOpenFilters(value);
   const handleToggleIsSearch = (value: boolean) => setIsSearchLoading(value);
 
@@ -118,8 +125,9 @@ const CategoryMain = ({ initialProducts = [] }: { initialProducts?: CardProps[] 
               isSearchLoading={isSearchLoading}
             />
           </div>
-
-          {/* Вивід JSON-LD скрипта */}
+          <div className="mt-20 border-t border-pearl">
+            <RecommendedProducts title="Вам також може сподобатись:" />
+          </div>
           {products.length > 0 && catalogSchema && (
             <Script
               id="catalog-schema"
