@@ -145,14 +145,23 @@ const Header = () => {
     );
   };
 
-  const HeaderLogo = () => {
+const HeaderLogo = () => {
+    const isHomePage = pathname === "/";
+
+    if (isHomePage) {
+      return (
+        <span className="cursor-default">
+          <Image src={Logo} alt="Logo" loading="lazy" />
+        </span>
+      );
+    }
+
     return (
       <Link href="/" onClick={close}>
         <Image src={Logo} alt="Logo" loading="lazy" />
       </Link>
     );
   };
-
   return (
     <header
       className={`px-[20px] lg:px-[60px] relative bg-white duration-300 ease-in-out mb-[40px]`}
